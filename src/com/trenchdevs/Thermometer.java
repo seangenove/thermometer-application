@@ -1,9 +1,10 @@
 package com.trenchdevs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Thermometer implements Subject {
-    private ArrayList<Observer> observers = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<>();
 
     private double boilingPoint = 10.0;
     private double freezingPoint = 0.0;
@@ -36,25 +37,13 @@ public class Thermometer implements Subject {
         observers.add(observer);
 
         // Send update for new observer
-        observer.update(
-                this.getBoilingPoint(),
-                this.getFreezingPoint(),
-                this.getThreshold(),
-                this.getPrevTemperature(),
-                this.getTemperature()
-        );
+        observer.update(this);
     }
 
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(
-                    this.getBoilingPoint(),
-                    this.getFreezingPoint(),
-                    this.getThreshold(),
-                    this.getPrevTemperature(),
-                    this.getTemperature()
-            );
+            observer.update(this);
         }
     }
 
@@ -74,7 +63,9 @@ public class Thermometer implements Subject {
         return this.boilingPoint;
     }
 
-    public double getFreezingPoint() { return this.freezingPoint; }
+    public double getFreezingPoint() {
+        return this.freezingPoint;
+    }
 
     public double getPrevTemperature() {
         return this.prevTemperature;
@@ -105,10 +96,16 @@ public class Thermometer implements Subject {
     }
 
     public void setTemperature(double temperature) {
-        this.prevTemperature = this.temperature;
-        this.temperature = temperature;
 
-        logChange("temperature", this.prevTemperature, this.temperature);
+        if(this.temperature == temperature) {
+            logChange("temperature", temperature, this.temperature);
+        } else {
+            this.prevTemperature = this.temperature;
+            this.temperature = temperature;
+
+            logChange("temperature", this.prevTemperature, this.temperature);
+        }
+
         notifyObservers();
     }
 
@@ -121,7 +118,7 @@ public class Thermometer implements Subject {
     }
 
     private void logChange(String variableName, double prevValue, double currentValue) {
-        String template = "\n* %s changed from %.2f C to %.2f C *";
+        String template = "\n* %s change: %.2f C to %.2f C *";
 
         System.out.println(String.format(template, variableName, prevValue, currentValue));
 //        System.out.println(toString());

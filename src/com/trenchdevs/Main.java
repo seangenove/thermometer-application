@@ -9,19 +9,27 @@ public class Main {
 
 //        Thermometer thermometer = getUserInput();
         Thermometer thermometer = getTestInput();
-
         System.out.println(thermometer.toString());
 
         BoilingPointObserver boilingPointObserver = new BoilingPointObserver(thermometer);
+        FreezingPointObserver freezingPointObserver = new FreezingPointObserver(thermometer);
 
         // Test Boiling Point
-        thermometer.setTemperature(10.5);
         thermometer.setTemperature(9.5);
         thermometer.setTemperature(10);
         thermometer.setTemperature(9.5);
+        thermometer.setTemperature(9.5);
+        thermometer.setTemperature(10.5);
+        thermometer.setTemperature(10);
         thermometer.setTemperature(11);
-//        thermometer.setTemperature(10);
-//        thermometer.setTemperature(4);
+        thermometer.setTemperature(11);
+        thermometer.setTemperature(5);
+
+//        // Test Freezing Point
+        thermometer.setTemperature(0);
+        thermometer.setTemperature(-0.5);
+        thermometer.setTemperature(1);
+        thermometer.setTemperature(0.5);
     }
 
     public static Thermometer getUserInput() {

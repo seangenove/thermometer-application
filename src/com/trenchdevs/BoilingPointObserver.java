@@ -11,17 +11,11 @@ public class BoilingPointObserver implements Observer {
     }
 
     @Override
-    public void update(
-            double boilingPoint,
-            double freezingPoint,
-            double threshold,
-            double prevTemperature,
-            double temperature
-    ) {
-        this.boilingPoint = boilingPoint;
-        this.threshold = threshold;
-        this.temperature = temperature;
-        this.prevTemperature = prevTemperature;
+    public void update(Thermometer thermometer) {
+        this.boilingPoint    = thermometer.getBoilingPoint();
+        this.threshold       = thermometer.getThreshold();
+        this.temperature     = thermometer.getTemperature();
+        this.prevTemperature = thermometer.getPrevTemperature();
 
         show();
     }
@@ -32,23 +26,42 @@ public class BoilingPointObserver implements Observer {
         String message = "";
         String messageTemplate = "Boiling Point Observer: %s";
 
-        if (temperature == boilingPoint || (Math.abs(prevTemperature - temperature) == threshold || temperature > boilingPoint)) {
+        if (temperature >= boilingPoint) {
 
-            if ((temperature == boilingPoint) && (prevTemperature == temperature)) {
-                message = "Previous temp is same with current temp. Still at boiling point";
-            } else if ((Math.abs(prevTemperature - temperature) == threshold) && prevTemperature == boilingPoint) {
-                message = "Temperature fluctuated by " + threshold + " C. Still at boiling point.";
-            } else if (temperature > boilingPoint && (temperature - boilingPoint) != threshold) {
-                message = "Temperature is BEYOND boiling point!";
+            if (temperature == boilingPoint) {
+
+                if(prevTemperature == boilingPoint) {
+                    message = "SHOULD RETURN. Previous temp == current temp. Still at boiling point!";
+                } else {
+
+                    if((Math.abs(prevTemperature - temperature) == threshold)) {
+                        message = "Temperature fluctuated by " + threshold + " C. Still at boiling point.";
+                    } else {
+                        message = "Temperature at boiling point!";
+                    }
+
+                }
+
             } else {
-                message = "Temperature is AT boiling point!";
+
+                if((Math.abs(prevTemperature - temperature) == threshold)) {
+                    message = "Temperature fluctuated by " + threshold + " C. Still at boiling point.";
+                } else {
+                    message = "Temperature beyond boiling point!";
+                }
             }
+
         } else {
-            return;
+
+            if(temperature >= boilingPoint && (Math.abs(prevTemperature - temperature) == threshold)) {
+                message = "Temperature fluctuated by " + threshold + " C. Still at boiling point.";
+            } else {
+                return;
+            }
+
         }
 
         System.out.println(String.format(messageTemplate, message));
 
     }
-
 }
