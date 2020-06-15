@@ -16,16 +16,7 @@ public class Thermometer implements Subject {
     private double prevThreshold = 0.0;
     private double prevTemperature = 0.0;
 
-    private Thermometer() {
-    }
-
-    public Thermometer(double boilingPoint, double freezingPoint, double temperature) {
-        this.boilingPoint = boilingPoint;
-        this.freezingPoint = freezingPoint;
-        this.temperature = temperature;
-    }
-
-    public Thermometer(double boilingPoint, double freezingPoint, double threshold, double temperature) {
+    public Thermometer(double temperature, double boilingPoint, double freezingPoint, double threshold) {
         this.boilingPoint = boilingPoint;
         this.freezingPoint = freezingPoint;
         this.threshold = threshold;
@@ -49,7 +40,8 @@ public class Thermometer implements Subject {
 
     @Override
     public String toString() {
-        String template = "\n======== Thermometer Data ========\n" +
+        String template =
+                "\n======== Thermometer Data ========\n" +
                 "  Boiling Point  = %.2f C\n" +
                 "  Freezing Point = %.2f C\n" +
                 "  Threshold      = %.2f C\n" +
@@ -59,17 +51,13 @@ public class Thermometer implements Subject {
         return String.format(template, this.boilingPoint, this.freezingPoint, this.threshold, this.temperature);
     }
 
-    public double getBoilingPoint() {
-        return this.boilingPoint;
-    }
+    public double getBoilingPoint() { return this.boilingPoint; }
 
     public double getFreezingPoint() {
         return this.freezingPoint;
     }
 
-    public double getPrevTemperature() {
-        return this.prevTemperature;
-    }
+    public double getPrevTemperature() { return this.prevTemperature; }
 
     public double getTemperature() {
         return this.temperature;
@@ -97,7 +85,7 @@ public class Thermometer implements Subject {
 
     public void setTemperature(double temperature) {
 
-        if(this.temperature == temperature) {
+        if (this.temperature == temperature) {
             logChange("temperature", temperature, this.temperature);
         } else {
             this.prevTemperature = this.temperature;
@@ -121,6 +109,5 @@ public class Thermometer implements Subject {
         String template = "\n* %s change: %.2f C to %.2f C *";
 
         System.out.println(String.format(template, variableName, prevValue, currentValue));
-//        System.out.println(toString());
     }
 }
