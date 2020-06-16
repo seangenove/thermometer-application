@@ -6,21 +6,28 @@ import java.util.List;
 public class Thermometer implements Subject {
     private List<Observer> observers = new ArrayList<>();
 
-    private double boilingPoint = 10.0;
-    private double freezingPoint = 0.0;
-    private double threshold = 0.5;
-    private double temperature = 0.0;
+    private double temperature;
+    private double boilingPoint;
+    private double freezingPoint;
+    private double insignificantFluctuation = 0.5;
 
-    private double prevBoilingPoint = 0.0;
-    private double prevFreezingPoint = 0.0;
-    private double prevThreshold = 0.0;
-    private double prevTemperature = 0.0;
+    private double prevTemperature;
+    private double prevBoilingPoint;
+    private double prevFreezingPoint;
+    private double prevInsignificantFluctuation;
 
-    public Thermometer(double temperature, double boilingPoint, double freezingPoint, double threshold) {
+    private String template = "\n======== Thermometer Data ========\n" +
+            "  Temperature                = %.2f C\n\n" +
+            "  Boiling Point              = %.2f C\n" +
+            "  Freezing Point             = %.2f C\n" +
+            "  Insignificant Fluctuation  = %.2f C\n" +
+            "==================================";
+
+    public Thermometer(double temperature, double boilingPoint, double freezingPoint, double insignificantFluctuation) {
+        this.temperature = temperature;
         this.boilingPoint = boilingPoint;
         this.freezingPoint = freezingPoint;
-        this.threshold = threshold;
-        this.temperature = temperature;
+        this.insignificantFluctuation = insignificantFluctuation;
     }
 
     @Override
@@ -40,74 +47,74 @@ public class Thermometer implements Subject {
 
     @Override
     public String toString() {
-        String template =
-                "\n======== Thermometer Data ========\n" +
-                "  Boiling Point  = %.2f C\n" +
-                "  Freezing Point = %.2f C\n" +
-                "  Threshold      = %.2f C\n" +
-                "  Temperature    = %.2f C\n" +
-                "==================================";
 
-        return String.format(template, this.boilingPoint, this.freezingPoint, this.threshold, this.temperature);
+        return String.format(template,
+                this.getTemperature(),
+                this.getBoilingPoint(),
+                this.getFreezingPoint(),
+                this.getInsignificantFluctuation()
+        );
+        
     }
 
-    public double getBoilingPoint() { return this.boilingPoint; }
+    public double getBoilingPoint() {
+        return this.boilingPoint;
+    }
 
     public double getFreezingPoint() {
         return this.freezingPoint;
     }
 
-    public double getPrevTemperature() { return this.prevTemperature; }
+    public double getPrevTemperature() {
+        return this.prevTemperature;
+    }
 
     public double getTemperature() {
         return this.temperature;
     }
 
-    public double getThreshold() {
-        return this.threshold;
+    public double getInsignificantFluctuation() {
+        return this.insignificantFluctuation;
     }
 
     public void setBoilingPoint(double boilingPoint) {
         this.prevBoilingPoint = this.boilingPoint;
         this.boilingPoint = boilingPoint;
 
-        logChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
-        notifyObservers();
+        memberChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
     }
 
     public void setFreezingPoint(double freezingPoint) {
         this.prevFreezingPoint = this.freezingPoint;
         this.freezingPoint = freezingPoint;
 
-        logChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
-        notifyObservers();
+        memberChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
     }
 
     public void setTemperature(double temperature) {
 
         if (this.temperature == temperature) {
-            logChange("temperature", temperature, this.temperature);
+            memberChange("temperature", temperature, this.temperature);
         } else {
             this.prevTemperature = this.temperature;
             this.temperature = temperature;
 
-            logChange("temperature", this.prevTemperature, this.temperature);
+            memberChange("temperature", this.prevTemperature, this.temperature);
         }
-
-        notifyObservers();
     }
 
-    public void setThreshold(double threshold) {
-        this.prevThreshold = this.threshold;
-        this.threshold = threshold;
+    public void setInsignificantFluctuation(double insignificantFluctuation) {
+        this.prevInsignificantFluctuation = this.insignificantFluctuation;
+        this.insignificantFluctuation = insignificantFluctuation;
 
-        logChange("threshold", this.prevThreshold, this.threshold);
-        notifyObservers();
+        memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.getInsignificantFluctuation());
     }
 
-    private void logChange(String variableName, double prevValue, double currentValue) {
+    private void memberChange(String variableName, double prevValue, double currentValue) {
         String template = "\n* %s change: %.2f C to %.2f C *";
 
         System.out.println(String.format(template, variableName, prevValue, currentValue));
+
+        notifyObservers();
     }
 }

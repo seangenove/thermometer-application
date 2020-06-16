@@ -41,6 +41,19 @@ class ThermometerTest {
     }
 
     @Test
+    void shouldGetValidPrevTemperature() {
+        final double newTemperature = 6.0;
+        t.setTemperature(newTemperature);
+
+        assertEquals(temperature, t.getPrevTemperature());
+    }
+
+    @Test
+    void shouldGetValidBoilingPoint() {
+        assertEquals(boilingPoint, t.getBoilingPoint());
+    }
+
+    @Test
     void shouldSetValidTemperature() {
         final double newTemperature = 6.0;
         t.setTemperature(newTemperature);
@@ -56,17 +69,15 @@ class ThermometerTest {
     }
 
     @Test
-    void shouldGetValidPrevTemperature() {
-        final double newTemperature = 6.0;
-        t.setTemperature(newTemperature);
-
-        assertEquals(temperature, t.getPrevTemperature());
+    void shouldGetValidFreezingPoint() {
+        assertEquals(freezingPoint, t.getFreezingPoint());
     }
 
     @Test
-    void shouldGetValidBoilingPoint() {
-        assertEquals(boilingPoint, t.getBoilingPoint());
+    void shouldGetValidThreshold() {
+        assertEquals(threshold, t.getInsignificantFluctuation());
     }
+
 
     @Test
     void shouldSetValidBoilingPoint() {
@@ -76,10 +87,6 @@ class ThermometerTest {
         assertEquals(newBoilingPiont, t.getBoilingPoint());
     }
 
-    @Test
-    void shouldGetValidFreezingPoint() {
-        assertEquals(freezingPoint, t.getFreezingPoint());
-    }
 
     @Test
     void shouldSetValidFreezingPoint() {
@@ -89,16 +96,12 @@ class ThermometerTest {
         assertEquals(newFreezingPoint, t.getFreezingPoint());
     }
 
-    @Test
-    void shouldGetValidThreshold() {
-        assertEquals(threshold, t.getThreshold());
-    }
 
     @Test
     void shouldSetValidThreshold() {
         final double newThreshold = 11.0;
-        t.setThreshold(newThreshold);
+        t.setInsignificantFluctuation(newThreshold);
 
-        assertEquals(newThreshold, t.getThreshold());
+        assertEquals(newThreshold, t.getInsignificantFluctuation());
     }
 }

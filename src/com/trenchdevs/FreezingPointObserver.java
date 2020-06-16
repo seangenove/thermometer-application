@@ -13,7 +13,7 @@ public class FreezingPointObserver implements Observer {
     @Override
     public void update(Thermometer thermometer) {
         this.freezingPoint   = thermometer.getFreezingPoint();
-        this.threshold       = thermometer.getThreshold();
+        this.threshold       = thermometer.getInsignificantFluctuation();
         this.temperature     = thermometer.getTemperature();
         this.prevTemperature = thermometer.getPrevTemperature();
 
