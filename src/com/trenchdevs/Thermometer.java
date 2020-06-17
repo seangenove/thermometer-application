@@ -2,14 +2,15 @@ package com.trenchdevs;
 
 import java.util.*;
 
-
 public class Thermometer implements Subject {
+
     private List<Observer> observers = new ArrayList<>();
 
-    public static final String TEMPERATURE_KEY               = "temperature";
-    public static final String PREV_TEMPERATURE_KEY          = "prevTemperature";
-    public static final String BOILING_POINT_KEY             = "boilingPoint";
-    public static final String FREEZING_POINT_KEY            = "freezingPoint";
+    public static final String TEMPERATURE_KEY = "temperature";
+    public static final String PREV_TEMPERATURE_KEY = "prevTemperature";
+    public static final String BEFORE_PREV_TEMPERATURE_KEY = "beforePrevTemperature";
+    public static final String BOILING_POINT_KEY = "boilingPoint";
+    public static final String FREEZING_POINT_KEY = "freezingPoint";
     public static final String INSIGNIFICANT_FLUCTUATION_KEY = "insignificantFluctuation";
 
     private double temperature;
@@ -18,16 +19,17 @@ public class Thermometer implements Subject {
     private double insignificantFluctuation = 0.5;
 
     private double prevTemperature;
+    private double beforePrevTemperature;
     private double prevBoilingPoint;
     private double prevFreezingPoint;
     private double prevInsignificantFluctuation;
 
-    private String template = "\n======== Thermometer Data ========\n" +
-            "  Temperature                = %.2f C\n\n" +
-            "  Boiling Point              = %.2f C\n" +
-            "  Freezing Point             = %.2f C\n" +
-            "  Insignificant Fluctuation  = %.2f C\n" +
-            "==================================";
+    private static final String template = "\n========== Thermometer Data ==========\n" +
+            "Temperature                = %.2f C\n\n" +
+            "Boiling Point              = %.2f C\n" +
+            "Freezing Point             = %.2f C\n" +
+            "Insignificant Fluctuation  = %.2f C\n" +
+            "======================================";
 
     public Thermometer(double temperature, double boilingPoint, double freezingPoint, double insignificantFluctuation) {
         this.temperature = temperature;
@@ -55,12 +57,12 @@ public class Thermometer implements Subject {
     public String toString() {
 
         return String.format(template,
-                this.getTemperature(),
-                this.getBoilingPoint(),
-                this.getFreezingPoint(),
-                this.getInsignificantFluctuation()
+                this.temperature,
+                this.boilingPoint,
+                this.freezingPoint,
+                this.insignificantFluctuation
         );
-        
+
     }
 
     public double getBoilingPoint() {
@@ -99,13 +101,16 @@ public class Thermometer implements Subject {
 
     public void setTemperature(double temperature) {
 
-        if (this.temperature == temperature) {
-            memberChange("temperature", temperature, this.temperature);
-        } else {
+        if (this.temperature != temperature) {
+            if (this.prevTemperature != 0) {
+                this.beforePrevTemperature = this.prevTemperature;
+            }
+
             this.prevTemperature = this.temperature;
             this.temperature = temperature;
 
-            memberChange("temperature", this.prevTemperature, this.temperature);
+            System.out.print(this.temperature + " C ");
+            notifyObservers();
         }
     }
 
@@ -113,17 +118,18 @@ public class Thermometer implements Subject {
         this.prevInsignificantFluctuation = this.insignificantFluctuation;
         this.insignificantFluctuation = insignificantFluctuation;
 
-        memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.getInsignificantFluctuation());
+        memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.insignificantFluctuation);
     }
 
     public Map<String, Double> getProperties() {
         HashMap<String, Double> thermometerProperties = new HashMap<String, Double>();
 
-        thermometerProperties.put(TEMPERATURE_KEY, this.getTemperature());
-        thermometerProperties.put(PREV_TEMPERATURE_KEY, this.getPrevTemperature());
-        thermometerProperties.put(BOILING_POINT_KEY, this.getBoilingPoint());
-        thermometerProperties.put(FREEZING_POINT_KEY, this.getFreezingPoint());
-        thermometerProperties.put(INSIGNIFICANT_FLUCTUATION_KEY, this.getInsignificantFluctuation());
+        thermometerProperties.put(TEMPERATURE_KEY, this.temperature);
+        thermometerProperties.put(PREV_TEMPERATURE_KEY, this.prevTemperature);
+        thermometerProperties.put(BEFORE_PREV_TEMPERATURE_KEY, this.beforePrevTemperature);
+        thermometerProperties.put(BOILING_POINT_KEY, this.boilingPoint);
+        thermometerProperties.put(FREEZING_POINT_KEY, this.freezingPoint);
+        thermometerProperties.put(INSIGNIFICANT_FLUCTUATION_KEY, this.insignificantFluctuation);
 
         return Collections.unmodifiableMap(new HashMap<String, Double>(thermometerProperties));
     }
@@ -132,7 +138,11 @@ public class Thermometer implements Subject {
         String template = "\n* %s change: %.2f C to %.2f C *";
 
         System.out.println(String.format(template, variableName, prevValue, currentValue));
-
         notifyObservers();
+    }
+
+    // Methods mostly used for testing
+    public int getObserverCount() {
+        return observers.size();
     }
 }

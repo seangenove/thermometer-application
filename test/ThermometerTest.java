@@ -1,3 +1,5 @@
+import com.trenchdevs.BoilingPointObserver;
+import com.trenchdevs.FreezingPointObserver;
 import com.trenchdevs.Thermometer;
 import org.junit.After;
 import org.junit.Before;
@@ -116,5 +118,28 @@ class ThermometerTest {
         assertEquals(boilingPoint, thermometerProperties.get(Thermometer.BOILING_POINT_KEY));
         assertEquals(freezingPoint, thermometerProperties.get(Thermometer.FREEZING_POINT_KEY));
         assertEquals(insignificantFluctuation, thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY));
+    }
+
+    @Test
+    void shouldSetNewObserver() {
+        BoilingPointObserver bpo = new BoilingPointObserver(t);
+
+        assertEquals(1, t.getObserverCount());
+    }
+
+    @Test
+    void shouldSetNewObservers() {
+        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver(t);
+
+        assertEquals(2, t.getObserverCount());
+    }
+
+    @Test
+    void shouldNotifyObservers() {
+        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver(t);
+
+        assertEquals(2, t.getObserverCount());
     }
 }
