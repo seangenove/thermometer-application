@@ -1,9 +1,11 @@
 package com.trenchdevs;
 
+import java.util.Map;
+
 public class FreezingPointObserver implements Observer {
     private double freezingPoint;
     private double temperature;
-    private double threshold;
+    private double insignificantFluctuation;
     private double prevTemperature;
 
     public FreezingPointObserver(Subject thermometer) {
@@ -11,11 +13,11 @@ public class FreezingPointObserver implements Observer {
     }
 
     @Override
-    public void update(Thermometer thermometer) {
-        this.freezingPoint   = thermometer.getFreezingPoint();
-        this.threshold       = thermometer.getInsignificantFluctuation();
-        this.temperature     = thermometer.getTemperature();
-        this.prevTemperature = thermometer.getPrevTemperature();
+    public void update(Map<String, Double> thermometerProperties) {
+        this.temperature              = thermometerProperties.get(Thermometer.TEMPERATURE_KEY);
+        this.prevTemperature          = thermometerProperties.get(Thermometer.PREV_TEMPERATURE_KEY);
+        this.freezingPoint            = thermometerProperties.get(Thermometer.FREEZING_POINT_KEY);
+        this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
         show();
     }
@@ -33,8 +35,8 @@ public class FreezingPointObserver implements Observer {
                     message = "SHOULD RETURN. Previous temp == current temp. Still at freezing point!";
                 } else {
 
-                    if((Math.abs(prevTemperature - temperature) == threshold)) {
-                        message = "Temperature fluctuated by " + threshold + " C. Still at freezing point.";
+                    if((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
+                        message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at freezing point.";
                     } else {
                         message = "Temperature at freezing point!";
                     }
@@ -43,8 +45,8 @@ public class FreezingPointObserver implements Observer {
 
             } else {
 
-                if((Math.abs(prevTemperature - temperature) == threshold)) {
-                    message = "Temperature fluctuated by " + threshold + " C. Still at freezing point.";
+                if((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
+                    message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at freezing point.";
                 } else {
                     message = "Temperature beyond freezing point!";
                 }
@@ -52,8 +54,8 @@ public class FreezingPointObserver implements Observer {
 
         } else {
 
-            if(temperature <= freezingPoint && (Math.abs(prevTemperature - temperature) == threshold)) {
-                message = "Temperature fluctuated by " + threshold + " C. Still at freezing point.";
+            if(temperature <= freezingPoint && (Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
+                message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at freezing point.";
             } else {
                 return;
             }

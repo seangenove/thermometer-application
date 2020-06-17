@@ -1,10 +1,16 @@
 package com.trenchdevs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 public class Thermometer implements Subject {
     private List<Observer> observers = new ArrayList<>();
+
+    public static final String TEMPERATURE_KEY               = "temperature";
+    public static final String PREV_TEMPERATURE_KEY          = "prevTemperature";
+    public static final String BOILING_POINT_KEY             = "boilingPoint";
+    public static final String FREEZING_POINT_KEY            = "freezingPoint";
+    public static final String INSIGNIFICANT_FLUCTUATION_KEY = "insignificantFluctuation";
 
     private double temperature;
     private double boilingPoint;
@@ -35,13 +41,13 @@ public class Thermometer implements Subject {
         observers.add(observer);
 
         // Send update for new observer
-        observer.update(this);
+        observer.update(this.getProperties());
     }
 
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
-            observer.update(this);
+            observer.update(this.getProperties());
         }
     }
 
@@ -108,6 +114,18 @@ public class Thermometer implements Subject {
         this.insignificantFluctuation = insignificantFluctuation;
 
         memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.getInsignificantFluctuation());
+    }
+
+    public Map<String, Double> getProperties() {
+        HashMap<String, Double> thermometerProperties = new HashMap<String, Double>();
+
+        thermometerProperties.put(TEMPERATURE_KEY, this.getTemperature());
+        thermometerProperties.put(PREV_TEMPERATURE_KEY, this.getPrevTemperature());
+        thermometerProperties.put(BOILING_POINT_KEY, this.getBoilingPoint());
+        thermometerProperties.put(FREEZING_POINT_KEY, this.getFreezingPoint());
+        thermometerProperties.put(INSIGNIFICANT_FLUCTUATION_KEY, this.getInsignificantFluctuation());
+
+        return Collections.unmodifiableMap(new HashMap<String, Double>(thermometerProperties));
     }
 
     private void memberChange(String variableName, double prevValue, double currentValue) {

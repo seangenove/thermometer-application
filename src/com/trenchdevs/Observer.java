@@ -1,7 +1,8 @@
 package com.trenchdevs;
 
-public interface Observer {
-    void update(Thermometer thermometer);
+import java.util.Map;
 
+public interface Observer {
+    void update(Map<String, Double> thermometerProperties);
     void show();
 }

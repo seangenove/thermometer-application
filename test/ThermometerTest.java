@@ -5,12 +5,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ThermometerTest {
 
     Thermometer t;
-    protected double temperature, boilingPoint, freezingPoint, threshold;
+    protected double temperature, boilingPoint, freezingPoint, insignificantFluctuation;
 
     /**
      * Sets up the test fixture.
@@ -21,9 +23,9 @@ class ThermometerTest {
         temperature = 5.0;
         boilingPoint = 10.0;
         freezingPoint = 0.0;
-        threshold = 0.5;
+        insignificantFluctuation = 0.5;
 
-        t = new Thermometer(temperature, boilingPoint, freezingPoint, threshold);
+        t = new Thermometer(temperature, boilingPoint, freezingPoint, insignificantFluctuation);
     }
 
     /**
@@ -74,8 +76,8 @@ class ThermometerTest {
     }
 
     @Test
-    void shouldGetValidThreshold() {
-        assertEquals(threshold, t.getInsignificantFluctuation());
+    void shouldGetValidInsignificantFluctuation() {
+        assertEquals(insignificantFluctuation, t.getInsignificantFluctuation());
     }
 
 
@@ -98,10 +100,21 @@ class ThermometerTest {
 
 
     @Test
-    void shouldSetValidThreshold() {
-        final double newThreshold = 11.0;
-        t.setInsignificantFluctuation(newThreshold);
+    void shouldSetValidInsignificantFluctuation() {
+        final double newInsignificantFluctuation = 11.0;
+        t.setInsignificantFluctuation(newInsignificantFluctuation);
 
-        assertEquals(newThreshold, t.getInsignificantFluctuation());
+        assertEquals(newInsignificantFluctuation, t.getInsignificantFluctuation());
+    }
+
+    @Test
+    void shouldGetValidThermometerProperties() {
+        Map<String, Double> thermometerProperties = t.getProperties();
+
+        assertEquals(0.0, thermometerProperties.get(Thermometer.PREV_TEMPERATURE_KEY));
+        assertEquals(temperature, thermometerProperties.get(Thermometer.TEMPERATURE_KEY));
+        assertEquals(boilingPoint, thermometerProperties.get(Thermometer.BOILING_POINT_KEY));
+        assertEquals(freezingPoint, thermometerProperties.get(Thermometer.FREEZING_POINT_KEY));
+        assertEquals(insignificantFluctuation, thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY));
     }
 }

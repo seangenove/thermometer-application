@@ -1,5 +1,7 @@
 package com.trenchdevs;
 
+import java.util.Map;
+
 public class BoilingPointObserver implements Observer {
     private double boilingPoint;
     private double temperature;
@@ -11,11 +13,11 @@ public class BoilingPointObserver implements Observer {
     }
 
     @Override
-    public void update(Thermometer thermometer) {
-        this.boilingPoint = thermometer.getBoilingPoint();
-        this.insignificantFluctuation = thermometer.getInsignificantFluctuation();
-        this.temperature     = thermometer.getTemperature();
-        this.prevTemperature = thermometer.getPrevTemperature();
+    public void update(Map<String, Double> thermometerProperties) {
+        this.temperature              = thermometerProperties.get(Thermometer.TEMPERATURE_KEY);
+        this.prevTemperature          = thermometerProperties.get(Thermometer.PREV_TEMPERATURE_KEY);
+        this.boilingPoint             = thermometerProperties.get(Thermometer.BOILING_POINT_KEY);
+        this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
         show();
     }
@@ -27,18 +29,15 @@ public class BoilingPointObserver implements Observer {
         String messageTemplate = "Boiling Point Observer: %s";
 
         if (temperature >= boilingPoint) {
-            /**
-             * IF tempera
-             */
 
             if (temperature == boilingPoint) {
 
-                if(prevTemperature == boilingPoint) {
+                if (prevTemperature == boilingPoint) {
 //                    message = "SHOULD RETURN. Previous temp == current temp. Still at boiling point!";
                     return;
                 } else {
 
-                    if((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
+                    if ((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
 //                        message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at boiling point.";
                         return;
                     } else {
@@ -49,7 +48,7 @@ public class BoilingPointObserver implements Observer {
 
             } else {
 
-                if((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
+                if ((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
 //                    message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at boiling point.";
                     return;
                 } else {
@@ -59,7 +58,7 @@ public class BoilingPointObserver implements Observer {
 
         } else {
 
-            if(temperature >= boilingPoint && (Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
+            if (temperature >= boilingPoint && (Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
 //                message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at boiling point.";
                 return;
             } else {
