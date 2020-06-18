@@ -1,8 +1,6 @@
 import com.trenchdevs.BoilingPointObserver;
 import com.trenchdevs.FreezingPointObserver;
 import com.trenchdevs.Thermometer;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
