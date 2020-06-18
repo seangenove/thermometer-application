@@ -12,11 +12,20 @@ public class Main {
 
     }
 
+    public static void getNewThermometer() {
+
+    }
+
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Thermometer Application!");
 
-        Thermometer thermometer = new Thermometer(9.6, 10, 9.5, .5);
+        double temperature   = 5 ;
+        double boilingPoint  = 10;
+        double freezingPoint = 0;
+        double insignificantFluctuation = 0.5;
+
+        Thermometer thermometer = new Thermometer(temperature, boilingPoint, freezingPoint, insignificantFluctuation);
         System.out.println(thermometer.toString());
 
         BoilingPointObserver boilingPointObserver = new BoilingPointObserver(thermometer);
