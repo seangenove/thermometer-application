@@ -1,4 +1,4 @@
-package com.trenchdevs;
+package com.thermometer;
 import java.util.*;
 
 /**

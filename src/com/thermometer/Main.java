@@ -1,6 +1,4 @@
-package com.trenchdevs;
-
-import java.util.Scanner;
+package com.thermometer;
 
 public class Main {
 

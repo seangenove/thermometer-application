@@ -1,4 +1,4 @@
-package com.trenchdevs;
+package com.thermometer;
 
 public interface Subject {
     void registerObserver(Observer observer);
