@@ -55,20 +55,20 @@ public class BoilingPointObserver implements Observer {
             if (temperature >= insignificantFluctuationBase && temperature < boilingPoint) {
 
                 if (isAtBoilingPoint && (temperatureDifference <= insignificantFluctuation)) {
-                    /**
-                     * If previously at boiling point, then this is considered insignificant fluctuation
-                     *
-                     * SHOULD REMAIN at boiling point
-                     * SHOULD NOT send notification
+                    /*
+                      If previously at boiling point, then this is considered insignificant fluctuation
+
+                      SHOULD REMAIN at boiling point
+                      SHOULD NOT send notification
                      */
 
                     shouldNotify = false;
                 } else {
-                    /**
-                     * If previously NOT at boiling point, then temperature is not considered an insignificant fluctuation
-                     *
-                     * SHOULD NOT be at boiling point
-                     * SHOULD NOT be notified
+                    /*
+                      If previously NOT at boiling point, then temperature is not considered an insignificant fluctuation
+
+                      SHOULD NOT be at boiling point
+                      SHOULD NOT be notified
                      */
 
                     isAtBoilingPoint = false;
@@ -76,9 +76,9 @@ public class BoilingPointObserver implements Observer {
                 }
 
             } else {
-                /**
-                 * Temperature is at or above boiling point.
-                 * Use generic handler for temperature
+                /*
+                  Temperature is at or above boiling point.
+                  Use generic handler for temperature
                  */
                 handleTemperatureAtOrAboveBoilingPoint();
             }
@@ -94,22 +94,22 @@ public class BoilingPointObserver implements Observer {
         if (temperature >= boilingPoint) {
 
             if (isAtBoilingPoint) {
-                /**
-                 * Previous temperature and current temperature are at boiling point.
-                 *
-                 * SHOULD STILL be at boiling point
-                 * SHOULD NOT be notified
+                /*
+                  Previous temperature and current temperature are at boiling point.
+
+                  SHOULD STILL be at boiling point
+                  SHOULD NOT be notified
                  */
 
                 isAtBoilingPoint = true;
                 shouldNotify = false;
             } else {
-                /**
-                 * Previous temperature was not at boiling point
-                 * Current temperature is at boiling point.
-                 *
-                 * SHOULD BE at boiling point
-                 * SHOULD BE notified
+                /*
+                  Previous temperature was not at boiling point
+                  Current temperature is at boiling point.
+
+                  SHOULD BE at boiling point
+                  SHOULD BE notified
                  */
 
                 isAtBoilingPoint = true;
@@ -117,11 +117,11 @@ public class BoilingPointObserver implements Observer {
             }
 
         } else {
-            /**
-             * Current temperature is below boiling point.
-             *
-             * SHOULD NOT be at boiling point
-             * SHOULD NOT be notified
+            /*
+              Current temperature is below boiling point.
+
+              SHOULD NOT be at boiling point
+              SHOULD NOT be notified
              */
 
             isAtBoilingPoint = false;

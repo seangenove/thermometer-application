@@ -1,5 +1,4 @@
 package com.trenchdevs;
-
 import java.util.*;
 
 public class Thermometer implements Subject {

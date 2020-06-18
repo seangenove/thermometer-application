@@ -55,20 +55,20 @@ public class FreezingPointObserver implements Observer {
             if (temperature <= insignificantFluctuationBase && temperature > freezingPoint) {
 
                 if (isAtFreezingPoint && (temperatureDifference <= insignificantFluctuation)) {
-                    /**
-                     * If previously at freezing point, then this is considered insignificant fluctuation
-                     *
-                     * SHOULD REMAIN at freezing point
-                     * SHOULD NOT send notification
+                    /*
+                      If previously at freezing point, then this is considered insignificant fluctuation
+
+                      SHOULD REMAIN at freezing point
+                      SHOULD NOT send notification
                      */
 
                     shouldNotify = false;
                 } else {
-                    /**
-                     * If previously NOT at freezing point, then temperature is not considered an insignificant fluctuation
-                     *
-                     * SHOULD NOT be at freezing point
-                     * SHOULD NOT be notified
+                    /*
+                      If previously NOT at freezing point, then temperature is not considered an insignificant fluctuation
+
+                      SHOULD NOT be at freezing point
+                      SHOULD NOT be notified
                      */
 
                     isAtFreezingPoint = false;
@@ -76,9 +76,9 @@ public class FreezingPointObserver implements Observer {
                 }
 
             } else {
-                /**
-                 * Temperature is at or above freezing point.
-                 * Use generic handler for temperature
+                /*
+                  Temperature is at or above freezing point.
+                  Use generic handler for temperature
                  */
                 handleTemperatureAtOrBelowFreezingPoint();
             }
@@ -94,22 +94,22 @@ public class FreezingPointObserver implements Observer {
         if (temperature <= freezingPoint) {
 
             if (isAtFreezingPoint) {
-                /**
-                 * Previous temperature and current temperature are at freezing point.
-                 *
-                 * SHOULD STILL be at freezing point
-                 * SHOULD NOT be notified
+                /*
+                  Previous temperature and current temperature are at freezing point.
+
+                  SHOULD STILL be at freezing point
+                  SHOULD NOT be notified
                  */
 
                 isAtFreezingPoint = true;
                 shouldNotify = false;
             } else {
-                /**
-                 * Previous temperature was NOT at freezing point
-                 * Current temperature is at freezing point.
-                 *
-                 * SHOULD BE at freezing point
-                 * SHOULD BE notified
+                /*
+                  Previous temperature was NOT at freezing point
+                  Current temperature is at freezing point.
+
+                  SHOULD BE at freezing point
+                  SHOULD BE notified
                  */
 
                 isAtFreezingPoint = true;
@@ -117,11 +117,11 @@ public class FreezingPointObserver implements Observer {
             }
 
         } else {
-            /**
-             * Current temperature is above freezing point.
-             *
-             * SHOULD NOT be at freezing point
-             * SHOULD NOT be notified
+            /*
+              Current temperature is above freezing point.
+
+              SHOULD NOT be at freezing point
+              SHOULD NOT be notified
              */
 
             isAtFreezingPoint = false;
