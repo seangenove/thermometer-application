@@ -37,9 +37,9 @@ public class Thermometer implements Subject {
     /**
      * Sole constructor.
      *
-     * @param temperature initial temperature of the Thermometer.
-     * @param boilingPoint initial boiling point threshold of the Thermometer.
-     * @param freezingPoint initial freezing point threshold of the Thermometer.
+     * @param temperature initial temperature of the Thermometer
+     * @param boilingPoint initial boiling point threshold of the Thermometer
+     * @param freezingPoint initial freezing point threshold of the Thermometer
      * @param insignificantFluctuation initial insignificant fluctuation threshold
      */
     public Thermometer(double temperature, double boilingPoint, double freezingPoint, double insignificantFluctuation) {
@@ -51,7 +51,7 @@ public class Thermometer implements Subject {
 
     /**
      * Registers observer to Thermometer's list of observers and sends
-     * Thermometer property values via the observer's update method.
+     * Thermometer property values via the observer's update method
      *
      * @param observer observer to register
      */
@@ -87,52 +87,52 @@ public class Thermometer implements Subject {
     }
 
     /**
-     * Returns the Thermometer's boiling point threshold value.
+     * Returns the Thermometer's boiling point threshold value
      *
-     * @return the Thermometer's boiling point threshold value.
+     * @return the Thermometer's boiling point threshold value
      */
     public double getBoilingPoint() {
         return this.boilingPoint;
     }
 
     /**
-     * Returns the Thermometer's freezing point threshold value.
+     * Returns the Thermometer's freezing point threshold value
      *
-     * @return the Thermometer's freezing point threshold value.
+     * @return the Thermometer's freezing point threshold value
      */
     public double getFreezingPoint() {
         return this.freezingPoint;
     }
 
     /**
-     * Returns the Thermometer's previous temperature value.
+     * Returns the Thermometer's previous temperature value
      *
-     * @return the Thermometer's previous temperature value.
+     * @return the Thermometer's previous temperature value
      */
     public double getPrevTemperature() {
         return this.prevTemperature;
     }
 
     /**
-     * Returns the Thermometer's current temperature value.
+     * Returns the Thermometer's current temperature value
      *
-     * @return the Thermometer's current temperature value.
+     * @return the Thermometer's current temperature value
      */
     public double getTemperature() {
         return this.temperature;
     }
 
     /**
-     * Returns the Thermometer's insignificant fluctuation threshold value.
+     * Returns the Thermometer's insignificant fluctuation threshold value
      *
-     * @return the Thermometer's insignificant fluctuation threshold value.
+     * @return the Thermometer's insignificant fluctuation threshold value
      */
     public double getInsignificantFluctuation() {
         return this.insignificantFluctuation;
     }
 
     /**
-     * Returns an immutable HashMap containing current Thermometer properties.
+     * Returns an immutable HashMap containing current Thermometer properties
      *
      * @return an immutable HashMap containing current Thermometer properties
      * (temperature, previousTemperature, boilingPoint, freezingPoint and insignificantFluctuation)
@@ -150,9 +150,9 @@ public class Thermometer implements Subject {
     }
 
     /**
-     * Returns the current count of observers.
+     * Returns the current count of observers
      *
-     * @return the current count of observers.
+     * @return the current count of observers
      */
     public int getObserverCount() {
         return observers.size();
@@ -216,7 +216,7 @@ public class Thermometer implements Subject {
     }
 
     /**
-     * Logs value changes specified Thermometer class member then notifies all observers of the Thermometer class.
+     * Logs value changes specified Thermometer class member then notifies all observers of the Thermometer class
      *
      * @param member Thermometer class member that involves value change
      * @param previousValue previous value of specified Thermometer class member
