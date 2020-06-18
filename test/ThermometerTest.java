@@ -142,4 +142,23 @@ class ThermometerTest {
 
         assertEquals(2, t.getObserverCount());
     }
+
+    @Test
+    void shouldOutputCorrectToString() {
+        String template = "\n========== Thermometer Data ==========\n" +
+                "Temperature                = %.2f C\n\n" +
+                "Boiling Point              = %.2f C\n" +
+                "Freezing Point             = %.2f C\n" +
+                "Insignificant Fluctuation  = %.2f C\n" +
+                "======================================";
+
+        template = String.format(template,
+                this.temperature,
+                this.boilingPoint,
+                this.freezingPoint,
+                this.insignificantFluctuation
+        );
+
+        assertEquals(template, t.toString());
+    }
 }

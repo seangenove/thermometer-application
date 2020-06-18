@@ -8,7 +8,6 @@ public class Thermometer implements Subject {
 
     public static final String TEMPERATURE_KEY = "temperature";
     public static final String PREV_TEMPERATURE_KEY = "prevTemperature";
-    public static final String BEFORE_PREV_TEMPERATURE_KEY = "beforePrevTemperature";
     public static final String BOILING_POINT_KEY = "boilingPoint";
     public static final String FREEZING_POINT_KEY = "freezingPoint";
     public static final String INSIGNIFICANT_FLUCTUATION_KEY = "insignificantFluctuation";
@@ -19,7 +18,6 @@ public class Thermometer implements Subject {
     private double insignificantFluctuation = 0.5;
 
     private double prevTemperature;
-    private double beforePrevTemperature;
     private double prevBoilingPoint;
     private double prevFreezingPoint;
     private double prevInsignificantFluctuation;
@@ -102,9 +100,9 @@ public class Thermometer implements Subject {
     public void setTemperature(double temperature) {
 
         if (this.temperature != temperature) {
-            if (this.prevTemperature != 0) {
+//            if (this.prevTemperature != 0) {
                 this.beforePrevTemperature = this.prevTemperature;
-            }
+//            }
 
             this.prevTemperature = this.temperature;
             this.temperature = temperature;
@@ -126,7 +124,6 @@ public class Thermometer implements Subject {
 
         thermometerProperties.put(TEMPERATURE_KEY, this.temperature);
         thermometerProperties.put(PREV_TEMPERATURE_KEY, this.prevTemperature);
-        thermometerProperties.put(BEFORE_PREV_TEMPERATURE_KEY, this.beforePrevTemperature);
         thermometerProperties.put(BOILING_POINT_KEY, this.boilingPoint);
         thermometerProperties.put(FREEZING_POINT_KEY, this.freezingPoint);
         thermometerProperties.put(INSIGNIFICANT_FLUCTUATION_KEY, this.insignificantFluctuation);

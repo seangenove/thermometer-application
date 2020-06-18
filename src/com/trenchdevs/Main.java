@@ -15,11 +15,21 @@ public class Main {
         FreezingPointObserver freezingPointObserver = new FreezingPointObserver(thermometer);
 
         // Test Boiling Point
-        thermometer.setTemperature(9.5);
+        thermometer.setTemperature(9.9);
         thermometer.setTemperature(10);
-        thermometer.setTemperature(9.5);
+        thermometer.setTemperature(9.4);
+        thermometer.setTemperature(10);
+        thermometer.setTemperature(9.9);
         thermometer.setTemperature(10);
         thermometer.setTemperature(5);
+        thermometer.setTemperature(10.5);
+        thermometer.setTemperature(9.5);
+        thermometer.setTemperature(10);
+
+//        thermometer.setTemperature(10.1);
+//        thermometer.setTemperature(10.2);
+//        thermometer.setTemperature(10.3);
+//        thermometer.setTemperature(10.4);
 //        thermometer.setTemperature(10.5);
 //        thermometer.setTemperature(10);
 //        thermometer.setTemperature(11);
@@ -27,13 +37,13 @@ public class Main {
 
 
 ////        // Test Freezing Point
-        thermometer.setTemperature(0);
-        thermometer.setTemperature(-0.5);
-        thermometer.setTemperature(1);
-        thermometer.setTemperature(0.5);
-        thermometer.setTemperature(0.5);
+//        thermometer.setTemperature(0);
+//        thermometer.setTemperature(-0.5);
+//        thermometer.setTemperature(1);
+//        thermometer.setTemperature(0.5);
+//        thermometer.setTemperature(0.5);
 //        thermometer.setTemperature(-0.0);
-        thermometer.setTemperature(-0.5);
+//        thermometer.setTemperature(-0.5);
 
     }
 

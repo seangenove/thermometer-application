@@ -4,15 +4,13 @@ import java.util.Map;
 
 public class FreezingPointObserver implements Observer {
 
-    private boolean isAtfreezingPoint = false;
+    private boolean isAtFreezingPoint = false;
     private boolean shouldNotify = false;
 
     private double temperature;
     private double prevTemperature;
-    private double beforePrevTemperature;
     private double freezingPoint;
     private double insignificantFluctuation;
-
 
     public FreezingPointObserver(Subject thermometer) {
         thermometer.registerObserver(this);
@@ -20,101 +18,115 @@ public class FreezingPointObserver implements Observer {
 
     @Override
     public void update(Map<String, Double> thermometerProperties) {
-        this.temperature              = thermometerProperties.get(Thermometer.TEMPERATURE_KEY);
-        this.prevTemperature          = thermometerProperties.get(Thermometer.PREV_TEMPERATURE_KEY);
-        this.beforePrevTemperature = thermometerProperties.get(Thermometer.BEFORE_PREV_TEMPERATURE_KEY);
-        this.freezingPoint            = thermometerProperties.get(Thermometer.FREEZING_POINT_KEY);
+        this.temperature = thermometerProperties.get(Thermometer.TEMPERATURE_KEY);
+        this.prevTemperature = thermometerProperties.get(Thermometer.PREV_TEMPERATURE_KEY);
+        this.freezingPoint = thermometerProperties.get(Thermometer.FREEZING_POINT_KEY);
         this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
         show();
     }
 
-//    public void show() {
-//
-//        String message = "";
-//        String messageTemplate = "Freezing Point Observer: %s";
-//
-//        if (temperature <= freezingPoint) {
-//
-//            if (temperature == freezingPoint) {
-//
-//                if(prevTemperature == freezingPoint) {
-//                    message = "SHOULD RETURN. Previous temp == current temp. Still at freezing point!";
-//                } else {
-//
-//                    if((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
-//                        message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at freezing point.";
-//                    } else {
-//                        message = "Temperature at freezing point!";
-//                    }
-//
-//                }
-//
-//            } else {
-//
-//                if((Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
-//                    message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at freezing point.";
-//                } else {
-//                    message = "Temperature beyond freezing point!";
-//                }
-//            }
-//
-//        } else {
-//
-//            if(temperature <= freezingPoint && (Math.abs(prevTemperature - temperature) == insignificantFluctuation)) {
-//                message = "Temperature fluctuated by " + insignificantFluctuation + " C. Still at freezing point.";
-//            } else {
-//                return;
-//            }
-//
-//        }
-//
-//        System.out.println(String.format(messageTemplate, message));
-//
-//    }
-
     @Override
     public void show() {
 
-        checkIfTemperaturesIsAtFreezingPoint();
+        checkIfTemperatureIsAtFreezingPoint();
 
         if (shouldNotify) {
-            System.out.println("Temperature at freezing point!");
-        } else {
-            System.out.println("");
+            System.out.print("Temperature at freezing point!");
         }
 
     }
 
-    private void checkIfTemperaturesIsAtFreezingPoint() {
+    private void checkIfTemperatureIsAtFreezingPoint() {
 
-        double tempDifference = Math.abs(prevTemperature - temperature);
-        boolean isFluctuationAroundFreezingPoint = ((temperature - insignificantFluctuation) == freezingPoint ||
-                temperature + insignificantFluctuation == freezingPoint);
+        double temperatureDifference = Math.abs(prevTemperature - temperature);
+        double insignificantFluctuationBase = (freezingPoint + insignificantFluctuation);
+        double insignificantFluctuationCeiling = (freezingPoint - insignificantFluctuation);
 
-        // handle fluctuations AROUND freezing point   ex. 9.5 -> 10  OR  10 -> 10.5   (10 is boiling point)
-        if (tempDifference == insignificantFluctuation && (isFluctuationAroundFreezingPoint || temperature == freezingPoint)) {
+        // In between freezing point range. Insignificant fluctuations included.
+        // ex. -0.5 ... 0 ... 0.5
+        boolean isTempInBetweenFreezingPointRange = (temperature <= insignificantFluctuationBase &&
+                temperature >= insignificantFluctuationCeiling);
 
-            if ((beforePrevTemperature == temperature) || isFluctuationAroundFreezingPoint) {
-                shouldNotify = false;
+        System.out.println(isTempInBetweenFreezingPointRange);
+
+        if (isTempInBetweenFreezingPointRange) {
+
+            // Handling of temperatures below freezing point, but above insignificantFluctuationBase
+            // ex. 0.0 to 0.5
+            if (temperature <= insignificantFluctuationBase && temperature > freezingPoint) {
+
+                if (isAtFreezingPoint && (temperatureDifference <= insignificantFluctuation)) {
+                    /**
+                     * If previously at freezing point, then this is considered insignificant fluctuation
+                     *
+                     * SHOULD REMAIN at freezing point
+                     * SHOULD NOT send notification
+                     */
+
+                    shouldNotify = false;
+                } else {
+                    /**
+                     * If previously NOT at freezing point, then temperature is not considered an insignificant fluctuation
+                     *
+                     * SHOULD NOT be at freezing point
+                     * SHOULD NOT be notified
+                     */
+
+                    isAtFreezingPoint = false;
+                    shouldNotify = false;
+                }
+
             } else {
-                shouldNotify = true;
+                /**
+                 * Temperature is at or above freezing point.
+                 * Use generic handler for temperature
+                 */
+                handleTemperatureAtOrBelowFreezingPoint();
             }
 
-            return;
+        } else {
+            // handle all temperature at or beyond freezing point
+            handleTemperatureAtOrBelowFreezingPoint();
         }
 
-        // handle all temperature at or below freezing point
+    }
+
+    public void handleTemperatureAtOrBelowFreezingPoint() {
         if (temperature <= freezingPoint) {
 
-            if (isAtfreezingPoint) {
+            if (isAtFreezingPoint) {
+                /**
+                 * Previous temperature and current temperature are at freezing point.
+                 *
+                 * SHOULD STILL be at freezing point
+                 * SHOULD NOT be notified
+                 */
+
+                isAtFreezingPoint = true;
                 shouldNotify = false;
             } else {
-                isAtfreezingPoint = true;
+                /**
+                 * Previous temperature was NOT at freezing point
+                 * Current temperature is at freezing point.
+                 *
+                 * SHOULD BE at freezing point
+                 * SHOULD BE notified
+                 */
+
+                isAtFreezingPoint = true;
                 shouldNotify = true;
             }
 
         } else {
+            /**
+             * Current temperature is above freezing point.
+             *
+             * SHOULD NOT be at freezing point
+             * SHOULD NOT be notified
+             */
+
+            isAtFreezingPoint = false;
             shouldNotify = false;
         }
     }
