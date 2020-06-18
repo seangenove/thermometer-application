@@ -1,7 +1,13 @@
 package com.trenchdevs;
 import java.util.*;
 
+/**
+ * Thermometer class.
+ * @author Sean Genove
+ * @version 1.0.0, 06/19/2020
+ */
 public class Thermometer implements Subject {
+
 
     private List<Observer> observers = new ArrayList<>();
 
@@ -28,6 +34,14 @@ public class Thermometer implements Subject {
             "Insignificant Fluctuation  = %.2f C\n" +
             "======================================";
 
+    /**
+     * Sole constructor.
+     *
+     * @param temperature initial temperature of the Thermometer.
+     * @param boilingPoint initial boiling point threshold of the Thermometer.
+     * @param freezingPoint initial freezing point threshold of the Thermometer.
+     * @param insignificantFluctuation initial insignificant fluctuation threshold
+     */
     public Thermometer(double temperature, double boilingPoint, double freezingPoint, double insignificantFluctuation) {
         this.temperature = temperature;
         this.boilingPoint = boilingPoint;
@@ -35,6 +49,12 @@ public class Thermometer implements Subject {
         this.insignificantFluctuation = insignificantFluctuation;
     }
 
+    /**
+     * Registers observer to Thermometer's list of observers and sends
+     * Thermometer property values via the observer's update method.
+     *
+     * @param observer observer to register
+     */
     @Override
     public void registerObserver(Observer observer) {
         observers.add(observer);
@@ -43,6 +63,10 @@ public class Thermometer implements Subject {
         observer.update(this.getProperties());
     }
 
+
+    /**
+     * Sends immutable HashMap containing updated Thermometer properties to all Thermometer observers
+     */
     @Override
     public void notifyObservers() {
         for (Observer observer : observers) {
@@ -62,63 +86,57 @@ public class Thermometer implements Subject {
 
     }
 
+    /**
+     * Returns the Thermometer's boiling point threshold value.
+     *
+     * @return the Thermometer's boiling point threshold value.
+     */
     public double getBoilingPoint() {
         return this.boilingPoint;
     }
 
+    /**
+     * Returns the Thermometer's freezing point threshold value.
+     *
+     * @return the Thermometer's freezing point threshold value.
+     */
     public double getFreezingPoint() {
         return this.freezingPoint;
     }
 
+    /**
+     * Returns the Thermometer's previous temperature value.
+     *
+     * @return the Thermometer's previous temperature value.
+     */
     public double getPrevTemperature() {
         return this.prevTemperature;
     }
 
+    /**
+     * Returns the Thermometer's current temperature value.
+     *
+     * @return the Thermometer's current temperature value.
+     */
     public double getTemperature() {
         return this.temperature;
     }
 
+    /**
+     * Returns the Thermometer's insignificant fluctuation threshold value.
+     *
+     * @return the Thermometer's insignificant fluctuation threshold value.
+     */
     public double getInsignificantFluctuation() {
         return this.insignificantFluctuation;
     }
 
-    public void setBoilingPoint(double boilingPoint) {
-
-        if (boilingPoint > this.freezingPoint) {
-            this.prevBoilingPoint = this.boilingPoint;
-            this.boilingPoint = boilingPoint;
-
-            memberChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
-        }
-    }
-
-    public void setFreezingPoint(double freezingPoint) {
-        if (freezingPoint < this.boilingPoint) {
-            this.prevFreezingPoint = this.freezingPoint;
-            this.freezingPoint = freezingPoint;
-
-            memberChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
-        }
-    }
-
-    public void setTemperature(double temperature) {
-
-        if (this.temperature != temperature) {
-            this.prevTemperature = this.temperature;
-            this.temperature = temperature;
-
-            System.out.print("\n" + this.temperature + " C ");
-            notifyObservers();
-        }
-    }
-
-    public void setInsignificantFluctuation(double insignificantFluctuation) {
-        this.prevInsignificantFluctuation = this.insignificantFluctuation;
-        this.insignificantFluctuation = insignificantFluctuation;
-
-        memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.insignificantFluctuation);
-    }
-
+    /**
+     * Returns an immutable HashMap containing current Thermometer properties.
+     *
+     * @return an immutable HashMap containing current Thermometer properties
+     * (temperature, previousTemperature, boilingPoint, freezingPoint and insignificantFluctuation)
+     */
     public Map<String, Double> getProperties() {
         HashMap<String, Double> thermometerProperties = new HashMap<String, Double>();
 
@@ -131,15 +149,83 @@ public class Thermometer implements Subject {
         return Collections.unmodifiableMap(new HashMap<String, Double>(thermometerProperties));
     }
 
-    private void memberChange(String variableName, double prevValue, double currentValue) {
-        String template = "\n* %s change: %.2f C to %.2f C *";
-
-        System.out.println(String.format(template, variableName, prevValue, currentValue));
-        notifyObservers();
-    }
-
-    // Used for testing
+    /**
+     * Returns the current count of observers.
+     *
+     * @return the current count of observers.
+     */
     public int getObserverCount() {
         return observers.size();
+    }
+
+    /**
+     * Sets new value for boiling point threshold
+     * 
+     * @param boilingPoint boiling point value to set
+     */
+    public void setBoilingPoint(double boilingPoint) {
+
+        if (boilingPoint > this.freezingPoint) {
+            this.prevBoilingPoint = this.boilingPoint;
+            this.boilingPoint = boilingPoint;
+
+            memberChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
+        }
+    }
+
+    /**
+     * Sets new value for freezing point threshold
+     *
+     * @param freezingPoint freezing point value to set
+     */
+    public void setFreezingPoint(double freezingPoint) {
+        if (freezingPoint < this.boilingPoint) {
+            this.prevFreezingPoint = this.freezingPoint;
+            this.freezingPoint = freezingPoint;
+
+            memberChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
+        }
+    }
+
+    /**
+     * Sets new value for temperature.
+     *
+     * @param temperature temperature value to set
+     */
+    public void setTemperature(double temperature) {
+
+        if (this.temperature != temperature) {
+            this.prevTemperature = this.temperature;
+            this.temperature = temperature;
+
+            System.out.print("\n" + this.temperature + " C ");
+            notifyObservers();
+        }
+    }
+
+    /**
+     * Sets new value for insignificant fluctuation threshold
+     *
+     * @param insignificantFluctuation insignificant fluctuation value to set
+     */
+    public void setInsignificantFluctuation(double insignificantFluctuation) {
+        this.prevInsignificantFluctuation = this.insignificantFluctuation;
+        this.insignificantFluctuation = insignificantFluctuation;
+
+        memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.insignificantFluctuation);
+    }
+
+    /**
+     * Logs value changes specified Thermometer class member then notifies all observers of the Thermometer class.
+     *
+     * @param member Thermometer class member that involves value change
+     * @param previousValue previous value of specified Thermometer class member
+     * @param currentValue current value of specified Thermometer class member
+     */
+    private void memberChange(String member, double previousValue, double currentValue) {
+        String template = "\n* %s change: %.2f C to %.2f C *";
+
+        System.out.println(String.format(template, member, previousValue, currentValue));
+        notifyObservers();
     }
 }

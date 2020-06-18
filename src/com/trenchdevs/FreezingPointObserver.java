@@ -62,6 +62,7 @@ public class FreezingPointObserver implements Observer {
                       SHOULD NOT send notification
                      */
 
+                    isAtFreezingPoint = true;
                     shouldNotify = false;
                 } else {
                     /*
@@ -101,7 +102,6 @@ public class FreezingPointObserver implements Observer {
                   SHOULD NOT be notified
                  */
 
-                isAtFreezingPoint = true;
                 shouldNotify = false;
             } else {
                 /*

@@ -61,7 +61,7 @@ public class BoilingPointObserver implements Observer {
                       SHOULD REMAIN at boiling point
                       SHOULD NOT send notification
                      */
-
+                    isAtBoilingPoint = true;
                     shouldNotify = false;
                 } else {
                     /*
@@ -101,7 +101,6 @@ public class BoilingPointObserver implements Observer {
                   SHOULD NOT be notified
                  */
 
-                isAtBoilingPoint = true;
                 shouldNotify = false;
             } else {
                 /*
