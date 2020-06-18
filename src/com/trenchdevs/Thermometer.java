@@ -84,26 +84,27 @@ public class Thermometer implements Subject {
     }
 
     public void setBoilingPoint(double boilingPoint) {
-        this.prevBoilingPoint = this.boilingPoint;
-        this.boilingPoint = boilingPoint;
 
-        memberChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
+        if (boilingPoint > this.freezingPoint) {
+            this.prevBoilingPoint = this.boilingPoint;
+            this.boilingPoint = boilingPoint;
+
+            memberChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
+        }
     }
 
     public void setFreezingPoint(double freezingPoint) {
-        this.prevFreezingPoint = this.freezingPoint;
-        this.freezingPoint = freezingPoint;
+        if (freezingPoint < this.boilingPoint) {
+            this.prevFreezingPoint = this.freezingPoint;
+            this.freezingPoint = freezingPoint;
 
-        memberChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
+            memberChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
+        }
     }
 
     public void setTemperature(double temperature) {
 
         if (this.temperature != temperature) {
-//            if (this.prevTemperature != 0) {
-                this.beforePrevTemperature = this.prevTemperature;
-//            }
-
             this.prevTemperature = this.temperature;
             this.temperature = temperature;
 
@@ -138,7 +139,7 @@ public class Thermometer implements Subject {
         notifyObservers();
     }
 
-    // Methods mostly used for testing
+    // Used for testing
     public int getObserverCount() {
         return observers.size();
     }

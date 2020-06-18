@@ -82,24 +82,37 @@ class ThermometerTest {
         assertEquals(insignificantFluctuation, t.getInsignificantFluctuation());
     }
 
-
     @Test
-    void shouldSetValidBoilingPoint() {
-        final double newBoilingPiont = 11.0;
-        t.setBoilingPoint(newBoilingPiont);
+    void shouldSetNewBoilingPoint() {
+        final double newBoilingPoint = boilingPoint - 1.0;
 
-        assertEquals(newBoilingPiont, t.getBoilingPoint());
+        t.setBoilingPoint(newBoilingPoint);
+
+        assertEquals(newBoilingPoint, t.getBoilingPoint());
     }
 
+    @Test
+    void shouldNotSetBoilingPointThatIsAtOrBelowFreezingPoint() {
+        t.setBoilingPoint(freezingPoint);
+
+        assertEquals(boilingPoint, t.getBoilingPoint());
+    }
 
     @Test
-    void shouldSetValidFreezingPoint() {
-        final double newFreezingPoint = 11.0;
+    void shouldSetNewFreezingPoint() {
+        final double newFreezingPoint = freezingPoint + 1.0;
+
         t.setFreezingPoint(newFreezingPoint);
 
         assertEquals(newFreezingPoint, t.getFreezingPoint());
     }
 
+    @Test
+    void shouldNotSetFreezingPointThatIsAtOrAboveBoilingPoint() {
+        t.setFreezingPoint(boilingPoint);
+
+        assertEquals(freezingPoint, t.getFreezingPoint());
+    }
 
     @Test
     void shouldSetValidInsignificantFluctuation() {
