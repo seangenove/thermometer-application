@@ -108,7 +108,7 @@ public class Thermometer implements Subject {
             this.prevTemperature = this.temperature;
             this.temperature = temperature;
 
-            System.out.print(this.temperature + " C ");
+            System.out.print("\n" + this.temperature + " C ");
             notifyObservers();
         }
     }

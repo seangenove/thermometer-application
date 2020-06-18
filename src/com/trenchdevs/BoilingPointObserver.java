@@ -32,9 +32,7 @@ public class BoilingPointObserver implements Observer {
         checkIfTemperatureIsAtBoilingPoint();
 
         if (shouldNotify) {
-            System.out.print("Temperature at boiling point!");
-        } else {
-            System.out.print("");
+            System.out.print("-> Temperature reached boiling point!");
         }
 
     }

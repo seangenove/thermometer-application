@@ -4,68 +4,33 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static void setTemperatures(Thermometer t, double[] temperatures) {
+
+        for (double temperature : temperatures) {
+            t.setTemperature(temperature);
+        }
+
+    }
+
     public static void main(String[] args) {
+
         System.out.println("Welcome to the Thermometer Application!");
 
-//        Thermometer thermometer = getUserInput();
-        Thermometer thermometer = getTestInput();
+        Thermometer thermometer = new Thermometer(9.6, 10, 9.5, .5);
         System.out.println(thermometer.toString());
 
         BoilingPointObserver boilingPointObserver = new BoilingPointObserver(thermometer);
         FreezingPointObserver freezingPointObserver = new FreezingPointObserver(thermometer);
 
-        // Test Boiling Point
-        thermometer.setTemperature(9.9);
-        thermometer.setTemperature(10);
-        thermometer.setTemperature(9.4);
-        thermometer.setTemperature(10);
-        thermometer.setTemperature(9.9);
-        thermometer.setTemperature(10);
-        thermometer.setTemperature(5);
-        thermometer.setTemperature(10.5);
-        thermometer.setTemperature(9.5);
-        thermometer.setTemperature(10);
+        double[] temperatures1 = {5, 6, 6.74, 10, 10.2, 9.5, 9.9, 10, 9.5, 10, 10.5, 5};
+        double[] temperatures2 = {5, 1, 0, 0.5, 0, -0.5, 1, -69};
+        double[] temperatures3 = {9.5, 10, 9.5};
 
-//        thermometer.setTemperature(10.1);
-//        thermometer.setTemperature(10.2);
-//        thermometer.setTemperature(10.3);
-//        thermometer.setTemperature(10.4);
-//        thermometer.setTemperature(10.5);
-//        thermometer.setTemperature(10);
-//        thermometer.setTemperature(11);
-//        thermometer.setTemperature(11);
-
-
-////        // Test Freezing Point
-//        thermometer.setTemperature(0);
-//        thermometer.setTemperature(-0.5);
-//        thermometer.setTemperature(1);
-//        thermometer.setTemperature(0.5);
-//        thermometer.setTemperature(0.5);
-//        thermometer.setTemperature(-0.0);
-//        thermometer.setTemperature(-0.5);
+        setTemperatures(thermometer, temperatures1);
+        setTemperatures(thermometer, temperatures2);
+        setTemperatures(thermometer, temperatures3);
 
     }
 
-    public static Thermometer getUserInput() {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("\nEnter boiling point: ");
-        double boilingPoint = scanner.nextDouble();
-
-        System.out.print("Enter freezing point: ");
-        double freezingPoint = scanner.nextDouble();
-
-        System.out.print("Enter threshold interval: ");
-        double threshold = scanner.nextDouble();
-
-        System.out.print("Enter temperature: ");
-        double temperature = scanner.nextDouble();
-
-        return new Thermometer(boilingPoint, freezingPoint, threshold, temperature);
-    }
-
-    public static Thermometer getTestInput() {
-        return new Thermometer(5, 10, 0, .5);
-    }
 }

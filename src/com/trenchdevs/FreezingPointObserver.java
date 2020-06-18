@@ -32,7 +32,7 @@ public class FreezingPointObserver implements Observer {
         checkIfTemperatureIsAtFreezingPoint();
 
         if (shouldNotify) {
-            System.out.print("Temperature at freezing point!");
+            System.out.print("-> Temperature reached freezing point!");
         }
 
     }
@@ -47,8 +47,6 @@ public class FreezingPointObserver implements Observer {
         // ex. -0.5 ... 0 ... 0.5
         boolean isTempInBetweenFreezingPointRange = (temperature <= insignificantFluctuationBase &&
                 temperature >= insignificantFluctuationCeiling);
-
-        System.out.println(isTempInBetweenFreezingPointRange);
 
         if (isTempInBetweenFreezingPointRange) {
 
