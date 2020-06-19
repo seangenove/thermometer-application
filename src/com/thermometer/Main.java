@@ -10,10 +10,6 @@ public class Main {
 
     }
 
-    public static void getNewThermometer() {
-
-    }
-
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Thermometer Application!");
@@ -26,8 +22,11 @@ public class Main {
         Thermometer thermometer = new Thermometer(temperature, boilingPoint, freezingPoint, insignificantFluctuation);
         System.out.println(thermometer.toString());
 
-        BoilingPointObserver boilingPointObserver = new BoilingPointObserver(thermometer);
-        FreezingPointObserver freezingPointObserver = new FreezingPointObserver(thermometer);
+        BoilingPointObserver boilingPointObserver = new BoilingPointObserver();
+        FreezingPointObserver freezingPointObserver = new FreezingPointObserver();
+
+        thermometer.registerObserver(boilingPointObserver);
+        thermometer.registerObserver(freezingPointObserver);
 
         double[] temperatures1 = {5, 6, 6.74, 10, 10.2, 9.5, 9.9, 10, 9.5, 10, 10.5, 5};
         double[] temperatures2 = {5, 1, 0, 0.5, 0, -0.5, 1, -69};

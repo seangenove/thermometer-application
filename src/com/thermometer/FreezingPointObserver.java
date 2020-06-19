@@ -12,8 +12,7 @@ public class FreezingPointObserver implements Observer {
     private double freezingPoint;
     private double insignificantFluctuation;
 
-    public FreezingPointObserver(Subject thermometer) {
-        thermometer.registerObserver(this);
+    public FreezingPointObserver() {
     }
 
     @Override
@@ -23,21 +22,15 @@ public class FreezingPointObserver implements Observer {
         this.freezingPoint = thermometerProperties.get(Thermometer.FREEZING_POINT_KEY);
         this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
-        show();
+        checkFreezingPoint();
     }
 
     @Override
     public void show() {
-
-        checkIfTemperatureIsAtFreezingPoint();
-
-        if (shouldNotify) {
-            System.out.print("-> Temperature reached freezing point!");
-        }
-
+        System.out.print("-> Temperature reached freezing point!");
     }
 
-    private void checkIfTemperatureIsAtFreezingPoint() {
+    private void checkFreezingPoint() {
 
         double temperatureDifference = Math.abs(prevTemperature - temperature);
         double insignificantFluctuationBase = (freezingPoint + insignificantFluctuation);
@@ -56,7 +49,8 @@ public class FreezingPointObserver implements Observer {
 
                 if (isAtFreezingPoint && (temperatureDifference <= insignificantFluctuation)) {
                     /*
-                      If previously at freezing point, then this is considered insignificant fluctuation
+                      If previously at freezing point and current temperature is within insignificantFluctuation,
+                      then this is considered insignificant fluctuation
 
                       SHOULD REMAIN at freezing point
                       SHOULD NOT send notification
@@ -81,17 +75,21 @@ public class FreezingPointObserver implements Observer {
                   Temperature is at or above freezing point.
                   Use generic handler for temperature
                  */
-                handleTemperatureAtOrBelowFreezingPoint();
+                checkTemperatureAtOrBelowFreezingPoint();
             }
 
         } else {
             // handle all temperature at or beyond freezing point
-            handleTemperatureAtOrBelowFreezingPoint();
+            checkTemperatureAtOrBelowFreezingPoint();
+        }
+
+        if (this.isAtFreezingPoint && this.shouldNotify) {
+            show();
         }
 
     }
 
-    public void handleTemperatureAtOrBelowFreezingPoint() {
+    public void checkTemperatureAtOrBelowFreezingPoint() {
         if (temperature <= freezingPoint) {
 
             if (isAtFreezingPoint) {
@@ -129,6 +127,20 @@ public class FreezingPointObserver implements Observer {
         }
     }
 
+    /**
+     * Returns isAtFreezingPoint value
+     *
+     * @return isAtFreezingPoint value
+     */
+    public boolean getIsAtFreezingPoint() {
+        return this.isAtFreezingPoint;
+    }
+
+    /**
+     * Returns shouldNotify value
+     *
+     * @return shouldNotify value
+     */
     public boolean getShouldNotify() {
         return shouldNotify;
     }

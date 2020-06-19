@@ -37,116 +37,149 @@ class BoilingPointObserverTest {
 
     @Test
     void Should_Notify_When_TemperatureIsAtBoilingPoint() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint);
 
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
+
     }
 
     @Test
     void Should_NotifyOnce_WhenTemperatureExceedsBoilingPoint() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint + insignificantFluctuation);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_When_TemperatureIsAlreadyAtBoilingPoint() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint + 1.0);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_When_TemperatureFluctuatesTwice() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint - insignificantFluctuation);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint + insignificantFluctuation);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_WhenTemperatureFluctuatesByPointOne() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint - 0.1);
+        assertFalse(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint - 0.1);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint + 1.0);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyTwice_When_TempExceedsBoilingPoint_AndWhen_TempResetsAndIsSetAtBoilingPoint() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint + insignificantFluctuation);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint - insignificantFluctuation);
+        assertFalse(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
     }
 
     @Test
     void Should_NotNotify_When_TemperatureIsNotAtBoilingPoint() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
+        assertFalse(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
     }
 
     @Test
     void Should_NotNotify_When_TemperatureHasInsignificantFluctuation() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint + insignificantFluctuation);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
 
         t.setTemperature(boilingPoint - insignificantFluctuation);
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertFalse(bpo.getShouldNotify());
     }
 
     @Test
     void Should_Notify_When_BoilingPointIsChangedToCurrentTemperature() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         t.setBoilingPoint(temperature);
 
+        assertTrue(bpo.getIsAtBoilingPoint());
         assertTrue(bpo.getShouldNotify());
     }
 

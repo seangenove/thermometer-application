@@ -36,116 +36,148 @@ class FreezingPointObserverTest {
 
     @Test
     void Should_Notify_When_TemperatureIsAtFreezingPoint() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint);
 
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_WhenTemperatureExceedsFreezingPoint() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint - insignificantFluctuation);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_When_TemperatureIsAlreadyAtFreezingPoint() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint - 1.0);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_When_TemperatureFluctuatesTwice() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint - insignificantFluctuation);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint + insignificantFluctuation);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyOnce_WhenTemperatureFluctuatesByPointOne() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint + 0.1);
+        assertFalse(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint + 0.1);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint - 1.0);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotifyTwice_When_TempExceedsFreezingPoint_AndWhen_TempResetsAndIsSetAtFreezingPoint() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint - insignificantFluctuation);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint + insignificantFluctuation);
+        assertFalse(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotNotify_When_TemperatureIsNotAtFreezingPoint() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
+        assertFalse(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
     }
 
     @Test
     void Should_NotNotify_When_TemperatureHasInsignificantFluctuation() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint + insignificantFluctuation);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
 
         t.setTemperature(freezingPoint - insignificantFluctuation);
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertFalse(fpo.getShouldNotify());
     }
 
     @Test
     void Should_Notify_When_FreezingPointIsChangedToCurrentTemperature() {
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         t.setFreezingPoint(temperature);
 
+        assertTrue(fpo.getIsAtFreezingPoint());
         assertTrue(fpo.getShouldNotify());
     }
 

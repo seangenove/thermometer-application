@@ -1,15 +1,17 @@
 package com.thermometer;
+
 import java.util.*;
 
 /**
  * Thermometer class.
+ *
  * @author Sean Genove
  * @version 1.0.0, 06/19/2020
  */
 public class Thermometer implements Subject {
 
 
-    private List<Observer> observers = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
 
     public static final String TEMPERATURE_KEY = "temperature";
     public static final String PREV_TEMPERATURE_KEY = "prevTemperature";
@@ -17,15 +19,13 @@ public class Thermometer implements Subject {
     public static final String FREEZING_POINT_KEY = "freezingPoint";
     public static final String INSIGNIFICANT_FLUCTUATION_KEY = "insignificantFluctuation";
 
+    public PropertyChangeLogger logger;
+
     private double temperature;
+    private double prevTemperature;
     private double boilingPoint;
     private double freezingPoint;
     private double insignificantFluctuation = 0.5;
-
-    private double prevTemperature;
-    private double prevBoilingPoint;
-    private double prevFreezingPoint;
-    private double prevInsignificantFluctuation;
 
     private static final String template = "\n========== Thermometer Data ==========\n" +
             "Temperature                = %.2f C\n\n" +
@@ -37,9 +37,9 @@ public class Thermometer implements Subject {
     /**
      * Sole constructor.
      *
-     * @param temperature initial temperature of the Thermometer
-     * @param boilingPoint initial boiling point threshold of the Thermometer
-     * @param freezingPoint initial freezing point threshold of the Thermometer
+     * @param temperature              initial temperature of the Thermometer
+     * @param boilingPoint             initial boiling point threshold of the Thermometer
+     * @param freezingPoint            initial freezing point threshold of the Thermometer
      * @param insignificantFluctuation initial insignificant fluctuation threshold
      */
     public Thermometer(double temperature, double boilingPoint, double freezingPoint, double insignificantFluctuation) {
@@ -47,6 +47,8 @@ public class Thermometer implements Subject {
         this.boilingPoint = boilingPoint;
         this.freezingPoint = freezingPoint;
         this.insignificantFluctuation = insignificantFluctuation;
+
+        this.logger = new PropertyChangeLogger();
     }
 
     /**
@@ -160,16 +162,17 @@ public class Thermometer implements Subject {
 
     /**
      * Sets new value for boiling point threshold
-     * 
+     *
      * @param boilingPoint boiling point value to set
      */
     public void setBoilingPoint(double boilingPoint) {
 
         if (boilingPoint > this.freezingPoint) {
-            this.prevBoilingPoint = this.boilingPoint;
+            double prevBoilingPoint = this.boilingPoint;
             this.boilingPoint = boilingPoint;
 
-            memberChange("boilingPoint", this.prevBoilingPoint, this.boilingPoint);
+            this.logger.log("boilingPoint", prevBoilingPoint, this.boilingPoint);
+            notifyObservers();
         }
     }
 
@@ -180,10 +183,11 @@ public class Thermometer implements Subject {
      */
     public void setFreezingPoint(double freezingPoint) {
         if (freezingPoint < this.boilingPoint) {
-            this.prevFreezingPoint = this.freezingPoint;
+            double prevFreezingPoint = this.freezingPoint;
             this.freezingPoint = freezingPoint;
 
-            memberChange("freezingPoint", this.prevFreezingPoint, this.freezingPoint);
+            this.logger.log("freezingPoint", prevFreezingPoint, this.freezingPoint);
+            notifyObservers();
         }
     }
 
@@ -209,23 +213,10 @@ public class Thermometer implements Subject {
      * @param insignificantFluctuation insignificant fluctuation value to set
      */
     public void setInsignificantFluctuation(double insignificantFluctuation) {
-        this.prevInsignificantFluctuation = this.insignificantFluctuation;
+        double prevInsignificantFluctuation = this.insignificantFluctuation;
         this.insignificantFluctuation = insignificantFluctuation;
 
-        memberChange("insignificantFluctuation", this.prevInsignificantFluctuation, this.insignificantFluctuation);
-    }
-
-    /**
-     * Logs value changes specified Thermometer class member then notifies all observers of the Thermometer class
-     *
-     * @param member Thermometer class member that involves value change
-     * @param previousValue previous value of specified Thermometer class member
-     * @param currentValue current value of specified Thermometer class member
-     */
-    private void memberChange(String member, double previousValue, double currentValue) {
-        String template = "\n* %s change: %.2f C to %.2f C *";
-
-        System.out.println(String.format(template, member, previousValue, currentValue));
+        this.logger.log("insignificantFluctuation", prevInsignificantFluctuation, this.insignificantFluctuation);
         notifyObservers();
     }
 }

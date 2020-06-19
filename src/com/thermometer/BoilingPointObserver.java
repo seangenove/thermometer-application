@@ -12,8 +12,7 @@ public class BoilingPointObserver implements Observer {
     private double boilingPoint;
     private double insignificantFluctuation;
 
-    public BoilingPointObserver(Subject thermometer) {
-        thermometer.registerObserver(this);
+    public BoilingPointObserver() {
     }
 
     @Override
@@ -23,21 +22,18 @@ public class BoilingPointObserver implements Observer {
         this.boilingPoint = thermometerProperties.get(Thermometer.BOILING_POINT_KEY);
         this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
-        show();
+        checkBoilingPoint();
     }
 
     @Override
     public void show() {
-
-        checkIfTemperatureIsAtBoilingPoint();
-
-        if (shouldNotify) {
-            System.out.print("-> Temperature reached boiling point!");
-        }
-
+        System.out.print("-> Temperature reached boiling point!");
     }
 
-    private void checkIfTemperatureIsAtBoilingPoint() {
+    /**
+     * Checks if current temperature is at boiling point and if a notification is necessary.
+     */
+    private void checkBoilingPoint() {
 
         double temperatureDifference = Math.abs(prevTemperature - temperature);
         double insignificantFluctuationBase = (boilingPoint - insignificantFluctuation);
@@ -56,7 +52,8 @@ public class BoilingPointObserver implements Observer {
 
                 if (isAtBoilingPoint && (temperatureDifference <= insignificantFluctuation)) {
                     /*
-                      If previously at boiling point, then this is considered insignificant fluctuation
+                      If previously at boiling point and current temperature is within insignificantFluctuation,
+                      then this is considered an insignificant temperature fluctuation
 
                       SHOULD REMAIN at boiling point
                       SHOULD NOT send notification
@@ -80,17 +77,23 @@ public class BoilingPointObserver implements Observer {
                   Temperature is at or above boiling point.
                   Use generic handler for temperature
                  */
-                handleTemperatureAtOrAboveBoilingPoint();
+                checkIfTemperatureAtOrAboveBoilingPoint();
             }
 
         } else {
-            // handle all temperature at or beyond boiling point
-            handleTemperatureAtOrAboveBoilingPoint();
+            checkIfTemperatureAtOrAboveBoilingPoint();
+        }
+
+        if (this.isAtBoilingPoint && this.shouldNotify) {
+            show();
         }
 
     }
 
-    public void handleTemperatureAtOrAboveBoilingPoint() {
+    /**
+     * Generic checker for current temperature if it is at boiling point
+     */
+    public void checkIfTemperatureAtOrAboveBoilingPoint() {
         if (temperature >= boilingPoint) {
 
             if (isAtBoilingPoint) {
@@ -128,7 +131,21 @@ public class BoilingPointObserver implements Observer {
         }
     }
 
+    /**
+     * Returns isAtBoilingPoint value
+     *
+     * @return shouldNotify value
+     */
+    public boolean getIsAtBoilingPoint() {
+        return this.isAtBoilingPoint;
+    }
+
+    /**
+     * Returns shouldNotify value
+     *
+     * @return shouldNotify value
+     */
     public boolean getShouldNotify() {
-        return shouldNotify;
+        return this.shouldNotify;
     }
 }

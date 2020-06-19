@@ -133,23 +133,30 @@ class ThermometerTest {
 
     @Test
     void shouldSetNewObserver() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
 
         assertEquals(1, t.getObserverCount());
     }
 
     @Test
     void shouldSetNewObservers() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
+
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         assertEquals(2, t.getObserverCount());
     }
 
     @Test
     void shouldNotifyObservers() {
-        BoilingPointObserver bpo = new BoilingPointObserver(t);
-        FreezingPointObserver fpo = new FreezingPointObserver(t);
+        BoilingPointObserver bpo = new BoilingPointObserver();
+        t.registerObserver(bpo);
+
+        FreezingPointObserver fpo = new FreezingPointObserver();
+        t.registerObserver(fpo);
 
         assertEquals(2, t.getObserverCount());
     }
