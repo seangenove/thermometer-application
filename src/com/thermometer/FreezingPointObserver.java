@@ -1,6 +1,12 @@
 package com.thermometer;
 import java.util.Map;
 
+/**
+ * FreezingPointObserver class. Implements Observer interface
+ *
+ * @author Sean Genove
+ * @version 1.0.0, 06/19/2020
+ */
 public class FreezingPointObserver implements Observer {
 
     private boolean isAtFreezingPoint = false;

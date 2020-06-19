@@ -18,13 +18,13 @@ public class Thermometer implements Subject {
     public static final String FREEZING_POINT_KEY = "freezingPoint";
     public static final String INSIGNIFICANT_FLUCTUATION_KEY = "insignificantFluctuation";
 
-    public PropertyChangeLogger logger;
-
     private double temperature;
     private double prevTemperature;
     private double boilingPoint;
     private double freezingPoint;
     private double insignificantFluctuation = 0.5;
+
+    public PropertyChangeLogger logger;
 
     private static final String template = "\n========== Thermometer Data ==========\n" +
             "Temperature                = %.2f C\n\n" +

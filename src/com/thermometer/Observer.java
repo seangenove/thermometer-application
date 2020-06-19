@@ -10,7 +10,7 @@ import java.util.Map;
 public interface Observer {
 
     /**
-     * Updates Observer's Thermometer property values
+     * Updates Observer's Subject property values
      *
      * @param subjectProperties immutable HashMap containing Subject property values
      */
