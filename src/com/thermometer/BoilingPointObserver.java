@@ -5,7 +5,6 @@ import java.util.Map;
 public class BoilingPointObserver implements Observer {
 
     private boolean isAtBoilingPoint = false;
-    private boolean shouldNotify = false;
 
     private double temperature;
     private double prevTemperature;
@@ -22,7 +21,10 @@ public class BoilingPointObserver implements Observer {
         this.boilingPoint = thermometerProperties.get(Thermometer.BOILING_POINT_KEY);
         this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
-        checkBoilingPoint();
+        if (shouldNotify() && this.isAtBoilingPoint) {
+            show();
+        }
+
     }
 
     @Override
@@ -33,24 +35,26 @@ public class BoilingPointObserver implements Observer {
     /**
      * Checks if current temperature is at boiling point and if a notification is necessary.
      */
-    private void checkBoilingPoint() {
+    private boolean shouldNotify() {
 
-        double temperatureDifference = Math.abs(prevTemperature - temperature);
-        double insignificantFluctuationBase = (boilingPoint - insignificantFluctuation);
-        double insignificantFluctuationCeiling = (boilingPoint + insignificantFluctuation);
+        double temperatureDifference = Math.abs(this.prevTemperature - this.temperature);
+        double insignificantFluctuationBase = (this.boilingPoint - this.insignificantFluctuation);
+        double insignificantFluctuationCeiling = (this.boilingPoint + this.insignificantFluctuation);
 
         // In between boiling point range. Insignificant fluctuations included.
         // ex. 9.5 ... 10 ... 10.5
-        boolean isTempInBetweenBoilingPointRange = (temperature >= insignificantFluctuationBase &&
-                temperature <= insignificantFluctuationCeiling);
+
+
+        boolean isTempInBetweenBoilingPointRange = (this.temperature >= insignificantFluctuationBase &&
+                this.temperature <= insignificantFluctuationCeiling);
 
         if (isTempInBetweenBoilingPointRange) {
 
             // Handling of temperatures below boiling point, but above insignificantFluctuationBase
             // ex. 9.5 to 9.9
-            if (temperature >= insignificantFluctuationBase && temperature < boilingPoint) {
+            if (this.temperature >= insignificantFluctuationBase && this.temperature < this.boilingPoint) {
 
-                if (isAtBoilingPoint && (temperatureDifference <= insignificantFluctuation)) {
+                if (this.isAtBoilingPoint && (temperatureDifference <= this.insignificantFluctuation)) {
                     /*
                       If previously at boiling point and current temperature is within insignificantFluctuation,
                       then this is considered an insignificant temperature fluctuation
@@ -58,8 +62,7 @@ public class BoilingPointObserver implements Observer {
                       SHOULD REMAIN at boiling point
                       SHOULD NOT send notification
                      */
-                    isAtBoilingPoint = true;
-                    shouldNotify = false;
+                    this.isAtBoilingPoint = true;
                 } else {
                     /*
                       If previously NOT at boiling point, then temperature is not considered an insignificant fluctuation
@@ -68,35 +71,31 @@ public class BoilingPointObserver implements Observer {
                       SHOULD NOT be notified
                      */
 
-                    isAtBoilingPoint = false;
-                    shouldNotify = false;
+                    this.isAtBoilingPoint = false;
                 }
+
+                return false;
 
             } else {
                 /*
                   Temperature is at or above boiling point.
                   Use generic handler for temperature
                  */
-                checkIfTemperatureAtOrAboveBoilingPoint();
+                return checkIfTemperatureAtOrAboveBoilingPoint();
             }
 
         } else {
-            checkIfTemperatureAtOrAboveBoilingPoint();
+            return checkIfTemperatureAtOrAboveBoilingPoint();
         }
-
-        if (this.isAtBoilingPoint && this.shouldNotify) {
-            show();
-        }
-
     }
 
     /**
      * Generic checker for current temperature if it is at boiling point
      */
-    public void checkIfTemperatureAtOrAboveBoilingPoint() {
+    public boolean checkIfTemperatureAtOrAboveBoilingPoint() {
         if (temperature >= boilingPoint) {
 
-            if (isAtBoilingPoint) {
+            if (this.isAtBoilingPoint) {
                 /*
                   Previous temperature and current temperature are at boiling point.
 
@@ -104,7 +103,7 @@ public class BoilingPointObserver implements Observer {
                   SHOULD NOT be notified
                  */
 
-                shouldNotify = false;
+                return false;
             } else {
                 /*
                   Previous temperature was not at boiling point
@@ -114,8 +113,8 @@ public class BoilingPointObserver implements Observer {
                   SHOULD BE notified
                  */
 
-                isAtBoilingPoint = true;
-                shouldNotify = true;
+                this.isAtBoilingPoint = true;
+                return true;
             }
 
         } else {
@@ -126,15 +125,15 @@ public class BoilingPointObserver implements Observer {
               SHOULD NOT be notified
              */
 
-            isAtBoilingPoint = false;
-            shouldNotify = false;
+            this.isAtBoilingPoint = false;
+            return false;
         }
     }
 
     /**
      * Returns isAtBoilingPoint value
      *
-     * @return shouldNotify value
+     * @return isAtBoilingPoint value
      */
     public boolean getIsAtBoilingPoint() {
         return this.isAtBoilingPoint;
@@ -146,6 +145,6 @@ public class BoilingPointObserver implements Observer {
      * @return shouldNotify value
      */
     public boolean getShouldNotify() {
-        return this.shouldNotify;
+        return this.shouldNotify();
     }
 }
