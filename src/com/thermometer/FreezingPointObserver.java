@@ -1,5 +1,4 @@
 package com.thermometer;
-
 import java.util.Map;
 
 public class FreezingPointObserver implements Observer {
@@ -22,7 +21,10 @@ public class FreezingPointObserver implements Observer {
         this.freezingPoint = thermometerProperties.get(Thermometer.FREEZING_POINT_KEY);
         this.insignificantFluctuation = thermometerProperties.get(Thermometer.INSIGNIFICANT_FLUCTUATION_KEY);
 
-        checkFreezingPoint();
+//        checkFreezingPoint();
+        if (shouldNotify() && this.isAtFreezingPoint) {
+            show();
+        }
     }
 
     @Override
@@ -30,100 +32,43 @@ public class FreezingPointObserver implements Observer {
         System.out.print("-> Temperature reached freezing point!");
     }
 
-    private void checkFreezingPoint() {
+    /**
+     * Checks if current temperature is at or below freezing point and if a notification is necessary.
+     */
+    public boolean shouldNotify() {
 
-        double temperatureDifference = Math.abs(prevTemperature - temperature);
-        double insignificantFluctuationBase = (freezingPoint + insignificantFluctuation);
-        double insignificantFluctuationCeiling = (freezingPoint - insignificantFluctuation);
+        double temperatureDifference = Math.abs(this.prevTemperature - this.temperature);
+        double insignificantFluctuationBase = (this.freezingPoint + this.insignificantFluctuation);
 
-        // In between freezing point range. Insignificant fluctuations included.
-        // ex. -0.5 ... 0 ... 0.5
-        boolean isTempInBetweenFreezingPointRange = (temperature <= insignificantFluctuationBase &&
-                temperature >= insignificantFluctuationCeiling);
+        if (this.temperature <= this.freezingPoint && !this.isAtFreezingPoint) {
 
-        if (isTempInBetweenFreezingPointRange) {
+            this.isAtFreezingPoint = true;
+            this.shouldNotify = true;
 
-            // Handling of temperatures below freezing point, but above insignificantFluctuationBase
-            // ex. 0.0 to 0.5
-            if (temperature <= insignificantFluctuationBase && temperature > freezingPoint) {
+            return true;
 
-                if (isAtFreezingPoint && (temperatureDifference <= insignificantFluctuation)) {
-                    /*
-                      If previously at freezing point and current temperature is within insignificantFluctuation,
-                      then this is considered insignificant fluctuation
+        } else if (this.temperature <= insignificantFluctuationBase && this.temperature > this.freezingPoint) {
 
-                      SHOULD REMAIN at freezing point
-                      SHOULD NOT send notification
-                     */
+            this.isAtFreezingPoint = (this.isAtFreezingPoint && (temperatureDifference <= this.insignificantFluctuation));
+            this.shouldNotify = false;
 
-                    isAtFreezingPoint = true;
-                    shouldNotify = false;
-                } else {
-                    /*
-                      If previously NOT at freezing point, then temperature is not considered an insignificant fluctuation
-
-                      SHOULD NOT be at freezing point
-                      SHOULD NOT be notified
-                     */
-
-                    isAtFreezingPoint = false;
-                    shouldNotify = false;
-                }
-
-            } else {
-                /*
-                  Temperature is at or above freezing point.
-                  Use generic handler for temperature
-                 */
-                checkTemperatureAtOrBelowFreezingPoint();
-            }
+            return false;
 
         } else {
-            // handle all temperature at or beyond freezing point
-            checkTemperatureAtOrBelowFreezingPoint();
-        }
 
-        if (this.isAtFreezingPoint && this.shouldNotify) {
-            show();
-        }
+            if (this.temperature > this.freezingPoint) {
 
-    }
+                // Current temperature is above freezing point.
+                // SHOULD NOT be at freezing point. SHOULD NOT be notified
 
-    public void checkTemperatureAtOrBelowFreezingPoint() {
-        if (temperature <= freezingPoint) {
+                this.isAtFreezingPoint = false;
+                this.shouldNotify = false;
 
-            if (isAtFreezingPoint) {
-                /*
-                  Previous temperature and current temperature are at freezing point.
-
-                  SHOULD STILL be at freezing point
-                  SHOULD NOT be notified
-                 */
-
-                shouldNotify = false;
-            } else {
-                /*
-                  Previous temperature was NOT at freezing point
-                  Current temperature is at freezing point.
-
-                  SHOULD BE at freezing point
-                  SHOULD BE notified
-                 */
-
-                isAtFreezingPoint = true;
-                shouldNotify = true;
+                return false;
             }
 
-        } else {
-            /*
-              Current temperature is above freezing point.
-
-              SHOULD NOT be at freezing point
-              SHOULD NOT be notified
-             */
-
-            isAtFreezingPoint = false;
-            shouldNotify = false;
+            this.shouldNotify = false;
+            return false;
         }
     }
 
@@ -142,6 +87,6 @@ public class FreezingPointObserver implements Observer {
      * @return shouldNotify value
      */
     public boolean getShouldNotify() {
-        return shouldNotify;
+        return this.shouldNotify;
     }
 }

@@ -29,7 +29,7 @@ public class Main {
         thermometer.registerObserver(freezingPointObserver);
 
         double[] temperatures1 = {5, 6, 6.74, 10, 10.2, 9.5, 9.9, 10, 9.5, 10, 10.5, 5};
-        double[] temperatures2 = {5, 1, 0, 0.5, 0, -0.5, 1, -69};
+        double[] temperatures2 = {5, 1, 0, 0.4, -0.3, 0, -0.5, 1, 0.1, -69};
         double[] temperatures3 = {9.5, 10, 9.5};
 
         setTemperatures(thermometer, temperatures1);

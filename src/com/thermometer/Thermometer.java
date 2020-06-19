@@ -10,7 +10,6 @@ import java.util.*;
  */
 public class Thermometer implements Subject {
 
-
     private final List<Observer> observers = new ArrayList<>();
 
     public static final String TEMPERATURE_KEY = "temperature";
@@ -37,10 +36,10 @@ public class Thermometer implements Subject {
     /**
      * Sole constructor.
      *
-     * @param temperature              initial temperature of the Thermometer
-     * @param boilingPoint             initial boiling point threshold of the Thermometer
-     * @param freezingPoint            initial freezing point threshold of the Thermometer
-     * @param insignificantFluctuation initial insignificant fluctuation threshold
+     * @param temperature              initial temperature value
+     * @param boilingPoint             initial boiling point threshold value
+     * @param freezingPoint            initial freezing point threshold value
+     * @param insignificantFluctuation initial insignificant fluctuation threshold value
      */
     public Thermometer(double temperature, double boilingPoint, double freezingPoint, double insignificantFluctuation) {
         this.temperature = temperature;
@@ -61,7 +60,6 @@ public class Thermometer implements Subject {
     public void registerObserver(Observer observer) {
         observers.add(observer);
 
-        // Send update for new observer
         observer.update(this.getProperties());
     }
 
