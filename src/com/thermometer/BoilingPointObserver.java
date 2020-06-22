@@ -40,6 +40,8 @@ public class BoilingPointObserver implements Observer {
 
     /**
      * Checks if current temperature is at or above boiling point and if a notification is necessary.
+     *
+     * @return a boolean value of true or false indicating if a notification is necessary
      */
     public boolean shouldNotify() {
 

@@ -40,6 +40,8 @@ public class FreezingPointObserver implements Observer {
 
     /**
      * Checks if current temperature is at or below freezing point and if a notification is necessary.
+     *
+     * @return a boolean value of true or false indicating if a notification is necessary
      */
     public boolean shouldNotify() {
 
