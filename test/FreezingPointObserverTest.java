@@ -122,7 +122,7 @@ class FreezingPointObserverTest {
     }
 
     @Test
-    void Should_NotifyTwice_When_TempExceedsFreezingPoint_AndWhen_TempResetsAndIsSetAtFreezingPoint() {
+    void Should_NotifyTwice_When_TempExceedsFreezingPoint_AndWhen_TempResets_And_IsSetAtFreezingPoint() {
         FreezingPointObserver fpo = new FreezingPointObserver();
         t.registerObserver(fpo);
 

@@ -124,7 +124,7 @@ class BoilingPointObserverTest {
     }
 
     @Test
-    void Should_NotifyTwice_When_TempExceedsBoilingPoint_AndWhen_TempResetsAndIsSetAtBoilingPoint() {
+    void Should_NotifyTwice_When_TempExceedsBoilingPoint_AndWhen_TempResets_And_IsSetAtBoilingPoint() {
         BoilingPointObserver bpo = new BoilingPointObserver();
         t.registerObserver(bpo);
 
